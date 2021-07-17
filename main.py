@@ -1,7 +1,7 @@
 import math
 import pygame as pg
 import random as rnd
-
+import time
 pg.init()
 pg.font.init()
 
@@ -106,14 +106,17 @@ def draw_grid():
 def selected_tile(x, y):
     for pos in tiles.keys():
         if x in range(tiles[pos][0], tiles[pos][0]+tile_size) and y in range(tiles[pos][1], tiles[pos][1]+tile_size):
-            if pg.mouse.get_pressed(3)[0]:
-                while pg.mouse.get_pressed(3)[0]:
-                    screen.blit(alphabets_tile[tiles_filling[pos-1]], pg.mouse.get_pos())
-                for block in blocks.keys():
-                    if pg.mouse.get_pos()[0] in range(blocks[block][0], blocks[block][0]+block_size) and \
-                            pg.mouse.get_pos()[1] in range(blocks[block][1], blocks[block][1]+block_size):
-                        screen.blit(alphabets_tile[tiles_filling[pos-1]], blocks[block])
-                        break
+            mouse_on = True
+            while mouse_on:
+                # screen.blit(alphabets_tile[tiles_filling[pos-1]], pg.mouse.get_pos())
+                print(pg.mouse.get_pos())
+                time.sleep(0.2)
+                # pg.display.update()
+            # for block in blocks.keys():
+            #     if pg.mouse.get_pos()[0] in range(blocks[block][0], blocks[block][0]+block_size) and \
+            #             pg.mouse.get_pos()[1] in range(blocks[block][1], blocks[block][1]+block_size):
+            #         screen.blit(alphabets_tile[tiles_filling[pos-1]], blocks[block])
+            #         break
 
 
 done = False
@@ -130,8 +133,11 @@ while not done:
     draw_grid()
     draw_tiles()
     put_tiles()
-    selected_tile(mouse_pos[0], mouse_pos[1])
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             done = True
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                selected_tile(mouse_pos[0], mouse_pos[1])
     pg.display.update()
