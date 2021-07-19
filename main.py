@@ -1,24 +1,25 @@
 import math
 import pygame as pg
 import random as rnd
+import numpy as np
 
 pg.init()
 pg.font.init()
 
 pg.display.set_caption("WordFeud")
 
-width = pg.display.Info().current_h-100
+width = pg.display.Info().current_h - 100
 screen = pg.display.set_mode((width, width))
 screen.fill([17, 20, 26])
 pg.display.flip()
 
 WHITE = (255, 255, 255)
 blocks = {}
-block_size = math.floor(width/20)
+block_size = math.floor(width / 20)
 
 tiles = {}
 tiles_to_fill = {}
-tile_size = math.floor(width/15)
+tile_size = math.floor(width / 15)
 font = pg.font.SysFont("Arial", block_size)
 
 a_t = font.render("a", True, WHITE)
@@ -56,81 +57,122 @@ he2_t = font.render("he2", True, WHITE)
 ye_t = font.render("ye", True, WHITE)
 
 a = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ا.png")
-a = pg.transform.scale(a, (tile_size-4, tile_size-4))
+a = pg.transform.scale(a, (tile_size - 4, tile_size - 4))
 alef = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\آ.png")
-alef = pg.transform.scale(alef, (tile_size-4, tile_size-4))
+alef = pg.transform.scale(alef, (tile_size - 4, tile_size - 4))
 be = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ب.png")
-be = pg.transform.scale(be, (tile_size-4, tile_size-4))
+be = pg.transform.scale(be, (tile_size - 4, tile_size - 4))
 pe = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\پ.png")
-pe = pg.transform.scale(pe, (tile_size-4, tile_size-4))
+pe = pg.transform.scale(pe, (tile_size - 4, tile_size - 4))
 te = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ت.png")
-te = pg.transform.scale(te, (tile_size-4, tile_size-4))
+te = pg.transform.scale(te, (tile_size - 4, tile_size - 4))
 se = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ث.png")
-se = pg.transform.scale(se, (tile_size-4, tile_size-4))
+se = pg.transform.scale(se, (tile_size - 4, tile_size - 4))
 jim = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ج.png")
-jim = pg.transform.scale(jim, (tile_size-4, tile_size-4))
+jim = pg.transform.scale(jim, (tile_size - 4, tile_size - 4))
 che = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\چ.png")
-che = pg.transform.scale(che, (tile_size-4, tile_size-4))
+che = pg.transform.scale(che, (tile_size - 4, tile_size - 4))
 he = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ح.png")
-he = pg.transform.scale(he, (tile_size-4, tile_size-4))
+he = pg.transform.scale(he, (tile_size - 4, tile_size - 4))
 khe = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\خ.png")
-khe = pg.transform.scale(khe, (tile_size-4, tile_size-4))
+khe = pg.transform.scale(khe, (tile_size - 4, tile_size - 4))
 dal = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\د.png")
-dal = pg.transform.scale(dal, (tile_size-4, tile_size-4))
+dal = pg.transform.scale(dal, (tile_size - 4, tile_size - 4))
 zal = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ذ.png")
-zal = pg.transform.scale(zal, (tile_size-4, tile_size-4))
+zal = pg.transform.scale(zal, (tile_size - 4, tile_size - 4))
 re = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ر.png")
-re = pg.transform.scale(re, (tile_size-4, tile_size-4))
+re = pg.transform.scale(re, (tile_size - 4, tile_size - 4))
 ze = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ز.png")
-ze = pg.transform.scale(ze, (tile_size-4, tile_size-4))
+ze = pg.transform.scale(ze, (tile_size - 4, tile_size - 4))
 zhe = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ژ.png")
-zhe = pg.transform.scale(zhe, (tile_size-4, tile_size-4))
+zhe = pg.transform.scale(zhe, (tile_size - 4, tile_size - 4))
 sin = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\س.png")
-sin = pg.transform.scale(sin, (tile_size-4, tile_size-4))
+sin = pg.transform.scale(sin, (tile_size - 4, tile_size - 4))
 shin = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ش.png")
-shin = pg.transform.scale(shin, (tile_size-4, tile_size-4))
+shin = pg.transform.scale(shin, (tile_size - 4, tile_size - 4))
 sad = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ص.png")
-sad = pg.transform.scale(sad, (tile_size-4, tile_size-4))
+sad = pg.transform.scale(sad, (tile_size - 4, tile_size - 4))
 zad = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ض.png")
-zad = pg.transform.scale(zad, (tile_size-4, tile_size-4))
+zad = pg.transform.scale(zad, (tile_size - 4, tile_size - 4))
 ta = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ط.png")
-ta = pg.transform.scale(ta, (tile_size-4, tile_size-4))
+ta = pg.transform.scale(ta, (tile_size - 4, tile_size - 4))
 za = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ظ.png")
-za = pg.transform.scale(za, (tile_size-4, tile_size-4))
+za = pg.transform.scale(za, (tile_size - 4, tile_size - 4))
 ein = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ع.png")
-ein = pg.transform.scale(ein, (tile_size-4, tile_size-4))
+ein = pg.transform.scale(ein, (tile_size - 4, tile_size - 4))
 qein = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\غ.png")
-qein = pg.transform.scale(qein, (tile_size-4, tile_size-4))
+qein = pg.transform.scale(qein, (tile_size - 4, tile_size - 4))
 fe = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ف.png")
-fe = pg.transform.scale(fe, (tile_size-4, tile_size-4))
+fe = pg.transform.scale(fe, (tile_size - 4, tile_size - 4))
 quf = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ق.png")
-quf = pg.transform.scale(quf, (tile_size-4, tile_size-4))
+quf = pg.transform.scale(quf, (tile_size - 4, tile_size - 4))
 kaf = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ک.png")
-kaf = pg.transform.scale(kaf, (tile_size-4, tile_size-4))
+kaf = pg.transform.scale(kaf, (tile_size - 4, tile_size - 4))
 gaf = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\گ.png")
-gaf = pg.transform.scale(gaf, (tile_size-4, tile_size-4))
+gaf = pg.transform.scale(gaf, (tile_size - 4, tile_size - 4))
 lam = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ل.png")
-lam = pg.transform.scale(lam, (tile_size-4, tile_size-4))
+lam = pg.transform.scale(lam, (tile_size - 4, tile_size - 4))
 mim = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\م.png")
-mim = pg.transform.scale(mim, (tile_size-4, tile_size-4))
+mim = pg.transform.scale(mim, (tile_size - 4, tile_size - 4))
 nun = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ن.png")
-nun = pg.transform.scale(nun, (tile_size-4, tile_size-4))
+nun = pg.transform.scale(nun, (tile_size - 4, tile_size - 4))
 vav = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\و.png")
-vav = pg.transform.scale(vav, (tile_size-4, tile_size-4))
+vav = pg.transform.scale(vav, (tile_size - 4, tile_size - 4))
 he2 = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ه.png")
-he2 = pg.transform.scale(he2, (tile_size-4, tile_size-4))
+he2 = pg.transform.scale(he2, (tile_size - 4, tile_size - 4))
 ye = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\ی.png")
-ye = pg.transform.scale(ye, (tile_size-4, tile_size-4))
+ye = pg.transform.scale(ye, (tile_size - 4, tile_size - 4))
 
 alphabets = {a: a_t, alef: alef_t, be: be_t, pe: pe_t, te: te_t, se: se_t, jim: jim_t, che: che_t, he: he_t, khe: khe_t,
              dal: dal_t, zal: zal_t, re: re_t, ze: ze_t, zhe: zhe_t, sin: sin_t, shin: shin_t, sad: sad_t, zad: zad_t,
              ta: ta_t, za: za_t, ein: ein_t, qein: qein_t, fe: fe_t, quf: quf_t, kaf: kaf_t, gaf: gaf_t, lam: lam_t,
              mim: mim_t, nun: nun_t, vav: vav_t, he2: he2_t, ye: ye_t}
 
+alphabets_text = ["ا", "آ", "ب", "پ", "ف", "ث", "ج", "چ", "ح", "خ", "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط",
+                  "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی"]
 alphabets_on_grid = {}
 for _x in range(1, 16):
     for _y in range(1, 16):
         alphabets_on_grid[(_x, _y)] = None
+
+found_words = {}  # {((x1, y1),(x2, y2)): word}
+
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa2.txt", "r", encoding='utf-8') as f:
+    _2l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa3.txt", "r", encoding='utf-8') as f:
+    _3l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa4.txt", "r", encoding='utf-8') as f:
+    _4l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa5.txt", "r", encoding='utf-8') as f:
+    _5l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa6.txt", "r", encoding='utf-8') as f:
+    _6l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa7.txt", "r", encoding='utf-8') as f:
+    _7l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa8.txt", "r", encoding='utf-8') as f:
+    _8l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa9.txt", "r", encoding='utf-8') as f:
+    _9l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa10.txt", "r", encoding='utf-8') as f:
+    _10l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa11.txt", "r", encoding='utf-8') as f:
+    _11l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa12.txt", "r", encoding='utf-8') as f:
+    _12l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa13.txt", "r", encoding='utf-8') as f:
+    _13l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa14.txt", "r", encoding='utf-8') as f:
+    _14l_words = f.read().split("\n")
+with open("F:\\files\\projects\\Games\\wordfeud-fa\\words\\fa15.txt", "r", encoding='utf-8') as f:
+    _15l_words = f.read().split("\n")
+
+all_words = np.array([_2l_words, _3l_words, _4l_words, _5l_words, _6l_words, _7l_words, _8l_words, _9l_words,
+                      _10l_words, _11l_words, _12l_words, _13l_words, _14l_words, _15l_words], dtype=object)
+
+del _2l_words, _3l_words, _4l_words, _5l_words, _6l_words, _7l_words, _8l_words, _9l_words, \
+    _10l_words, _11l_words, _12l_words, _13l_words, _14l_words,
+
+score = 0
 
 
 def draw_background():
@@ -145,11 +187,11 @@ def draw_background():
 def draw_tiles():
     global tiles, tiles_to_fill
     i = 1
-    for x in range(int(width/2)-4*tile_size, int(width/2)+4*tile_size, tile_size):
-        pg.draw.rect(screen, [0, 0, 0], pg.Rect(x, width-tile_size-int(width/40), tile_size, tile_size), 1,
+    for x in range(int(width / 2) - 4 * tile_size, int(width / 2) + 4 * tile_size, tile_size):
+        pg.draw.rect(screen, [0, 0, 0], pg.Rect(x, width - tile_size - int(width / 40), tile_size, tile_size), 1,
                      border_radius=3)
-        tiles[i] = (x, width-tile_size-int(width/40))
-        tiles_to_fill[i] = (x+2, width-tile_size-int(width/40)+2)
+        tiles[i] = (x, width - tile_size - int(width / 40))
+        tiles_to_fill[i] = (x + 2, width - tile_size - int(width / 40) + 2)
         i += 1
 
 
@@ -164,17 +206,17 @@ def reset_tile():
 
 def put_tiles():
     global tiles_filling
-    for i in range(1, len(tiles_filling)+1):
-        tile = list(alphabets.keys())[tiles_filling[i-1]]
+    for i in range(1, len(tiles_filling) + 1):
+        tile = list(alphabets.keys())[tiles_filling[i - 1]]
         screen.blit(tile, (tiles_to_fill[i]))
 
 
 def draw_grid():
     global blocks
-    for x in range(int(width/8), int(width/8)+15*block_size, block_size):
-        for y in range(int(width/8), int(width/8)+15*block_size, block_size):
+    for x in range(int(width / 8), int(width / 8) + 15 * block_size, block_size):
+        for y in range(int(width / 8), int(width / 8) + 15 * block_size, block_size):
             pg.draw.rect(screen, [0, 0, 0], pg.Rect(x, y, block_size, block_size), 1, border_radius=3)
-            blocks[(int((x-int(width/8))/block_size)+1, int((y-int(width/8))/block_size)+1)] = (x, y)
+            blocks[(int((x - int(width / 8)) / block_size) + 1, int((y - int(width / 8)) / block_size) + 1)] = (x, y)
     for pos in list(alphabets_on_grid.keys()):
         if alphabets_on_grid[pos] is not None:
             screen.blit(alphabets_on_grid[pos], blocks[pos])
@@ -183,8 +225,9 @@ def draw_grid():
 def move_tile(x, y):
     global tiles_filling, alphabets_on_grid
     for pos in tiles.keys():
-        if x in range(tiles[pos][0], tiles[pos][0]+tile_size) and y in range(tiles[pos][1], tiles[pos][1]+tile_size):
-            selected_tile = list(alphabets.keys())[tiles_filling[pos-1]]
+        if x in range(tiles[pos][0], tiles[pos][0] + tile_size) and y in range(tiles[pos][1],
+                                                                               tiles[pos][1] + tile_size):
+            selected_tile = list(alphabets.keys())[tiles_filling[pos - 1]]
             click_count = 1
             while 1:
                 for mouse_event in pg.event.get():
@@ -194,8 +237,8 @@ def move_tile(x, y):
                     for block in blocks.keys():
                         if pg.mouse.get_pos()[0] in range(blocks[block][0], blocks[block][0] + block_size) and \
                                 pg.mouse.get_pos()[1] in range(blocks[block][1], blocks[block][1] + block_size):
-                            alphabets_on_grid[block] = list(alphabets.values())[tiles_filling[pos-1]]
-                            del tiles_filling[pos-1]
+                            alphabets_on_grid[block] = list(alphabets.values())[tiles_filling[pos - 1]]
+                            del tiles_filling[pos - 1]
                             break
                     break
                 screen.blit(selected_tile, pg.mouse.get_pos())
@@ -208,6 +251,65 @@ def move_tile(x, y):
                 put_tiles()
 
 
+def find_word():
+    global found_words
+    new_word = ""
+    word = ""
+    for x in range(1, 16):
+        y1 = None
+        y = 1
+        while y < 16:
+            if alphabets_on_grid[(x, y)] in list(alphabets.values()):
+                if y1 is None:
+                    y1 = y
+                word += alphabets_text[list(alphabets.values()).index(alphabets_on_grid[(x, y)])]
+            elif len(word) > 1:
+                if ((x, y1), (x, y-1)) not in list(found_words.keys()):
+                    found_words[((x, y1), (x, y-1))] = word
+                    new_word = word
+                    word = ""
+                    break
+            else:
+                word = ""
+                y1 = None
+            y += 1
+
+    for y in range(1, 16):
+        x1 = None
+        x = 1
+        while x < 16:
+            if alphabets_on_grid[(x, y)] in list(alphabets.values()):
+                if x1 is None:
+                    x1 = x
+                word += alphabets_text[list(alphabets.values()).index(alphabets_on_grid[(x, y)])]
+            elif len(word) > 1:
+                if ((x1, y), (x - 1, y)) not in list(found_words.keys()):
+                    found_words[((x1, y), (x - 1, y))] = word
+                    new_word = word
+                    word = ""
+                    break
+            else:
+                word = ""
+                x1 = None
+            x += 1
+    if new_word != "":
+        return new_word
+    else:
+        return "nothing"
+
+
+def search_word(word):
+    global score
+    length = len(word)
+    if word != "nothing":
+        if word in all_words[length - 2]:
+            score += length
+        print("word found")
+    else:
+        pass
+    print(score)
+
+
 done = False
 while not done:
 
@@ -216,6 +318,7 @@ while not done:
     draw_grid()
     draw_tiles()
     put_tiles()
+    search_word(find_word())
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
