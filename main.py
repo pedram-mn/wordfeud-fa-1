@@ -209,7 +209,8 @@ def draw_grid():
             num += 1
     for pos in list(alphabets_on_grid.keys()):
         if alphabets_on_grid[pos] is not None:
-            screen.blit(alphabets_on_grid[pos], blocks[pos])
+            index = list(alphabets.values()).index(alphabets_on_grid[pos])
+            screen.blit(pg.transform.scale(list(alphabets.keys())[index], (block_size-4, block_size-4)), (blocks[pos][0]+2, blocks[pos][1]+2))
 
 
 def draw_tiles():
@@ -231,7 +232,6 @@ def start_tile():
 
 
 def put_tiles():
-    global tiles_filling
     for i in range(1, len(tiles_filling) + 1):
         tile = list(alphabets.keys())[tiles_filling[i - 1]]
         screen.blit(tile, (tiles_to_fill[i]))
@@ -401,128 +401,128 @@ def find_word():
     # horizental search
     word = ""
     for i in range(1, 212, 15):
-        for j in range(i, i+15):
+        for j in range(i+14, i-1, -1):
             if alphabets_on_grid[j] in list(alphabets.values()):
                 word += alphabets_text[list(alphabets.values()).index(alphabets_on_grid[j])]
-                if j == i+14:
-                    if len(word) > 1 and (j-len(word)+1, j) not in list(found_words.keys()):
+                if j == i:
+                    if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):
                         length = len(word)
                         if length == 2:
                             if word in _2l_words:
                                 score += 2
-                                found_words[(j-1, j)] = word
+                                found_words[(j+1, j)] = word
                         if length == 3:
                             if word in _3l_words:
                                 score += 3
-                                found_words[(j-2, j)] = word
+                                found_words[(j+2, j)] = word
                         if length == 4:
                             if word in _4l_words:
                                 score += 4
-                                found_words[(j-3, j)] = word
+                                found_words[(j+3, j)] = word
                         if length == 5:
                             if word in _5l_words:
                                 score += 5
-                                found_words[(j-4, j)] = word
+                                found_words[(j+4, j)] = word
                         if length == 6:
                             if word in _6l_words:
                                 score += 6
-                                found_words[(j-5, j)] = word
+                                found_words[(j+5, j)] = word
                         if length == 7:
                             if word in _7l_words:
                                 score += 7
-                                found_words[(j-6, j)] = word
+                                found_words[(j+6, j)] = word
                         if length == 8:
                             if word in _8l_words:
                                 score += 8
-                                found_words[(j-7, j)] = word
+                                found_words[(j+7, j)] = word
                         if length == 9:
                             if word in _9l_words:
                                 score += 9
-                                found_words[(j-8, j)] = word
+                                found_words[(j+8, j)] = word
                         if length == 10:
                             if word in _10l_words:
                                 score += 10
-                                found_words[(j-9, j)] = word
+                                found_words[(j+9, j)] = word
                         if length == 11:
                             if word in _11l_words:
                                 score += 11
-                                found_words[(j-10, j)] = word
+                                found_words[(j+10, j)] = word
                         if length == 12:
                             if word in _12l_words:
                                 score += 12
-                                found_words[(j-11, j)] = word
+                                found_words[(j+11, j)] = word
                         if length == 13:
                             if word in _13l_words:
                                 score += 13
-                                found_words[(j-12, j)] = word
+                                found_words[(j+12, j)] = word
                         if length == 14:
                             if word in _14l_words:
                                 score += 14
-                                found_words[(j-13, j)] = word
+                                found_words[(j+13, j)] = word
                         if length == 15:
                             if word in _15l_words:
                                 score += 15
-                                found_words[(j-14, j)] = word
+                                found_words[(j+14, j)] = word
                         word = ""
-                elif alphabets_on_grid[j+1] not in list(alphabets.values()):
-                    if len(word) > 1 and (j-len(word)+1, j) not in list(found_words.keys()):
+                elif alphabets_on_grid[j-1] not in list(alphabets.values()):
+                    if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):
                         length = len(word)
                         if length == 2:
                             if word in _2l_words:
                                 score += 2
-                                found_words[(j-1, j)] = word
+                                found_words[(j+1, j)] = word
                         if length == 3:
                             if word in _3l_words:
                                 score += 3
-                                found_words[(j-2, j)] = word
+                                found_words[(j+2, j)] = word
                         if length == 4:
                             if word in _4l_words:
                                 score += 4
-                                found_words[(j-3, j)] = word
+                                found_words[(j+3, j)] = word
                         if length == 5:
                             if word in _5l_words:
                                 score += 5
-                                found_words[(j-4, j)] = word
+                                found_words[(j+4, j)] = word
                         if length == 6:
                             if word in _6l_words:
                                 score += 6
-                                found_words[(j-5, j)] = word
+                                found_words[(j+5, j)] = word
                         if length == 7:
                             if word in _7l_words:
                                 score += 7
-                                found_words[(j-6, j)] = word
+                                found_words[(j+6, j)] = word
                         if length == 8:
                             if word in _8l_words:
                                 score += 8
-                                found_words[(j-7, j)] = word
+                                found_words[(j+7, j)] = word
                         if length == 9:
                             if word in _9l_words:
                                 score += 9
-                                found_words[(j-8, j)] = word
+                                found_words[(j+8, j)] = word
                         if length == 10:
                             if word in _10l_words:
                                 score += 10
-                                found_words[(j-9, j)] = word
+                                found_words[(j+9, j)] = word
                         if length == 11:
                             if word in _11l_words:
                                 score += 11
-                                found_words[(j-10, j)] = word
+                                found_words[(j+10, j)] = word
                         if length == 12:
                             if word in _12l_words:
                                 score += 12
-                                found_words[(j-11, j)] = word
+                                found_words[(j+11, j)] = word
                         if length == 13:
                             if word in _13l_words:
                                 score += 13
-                                found_words[(j-12, j)] = word
+                                found_words[(j+12, j)] = word
                         if length == 14:
                             if word in _14l_words:
                                 score += 14
-                                found_words[(j-13, j)] = word
+                                found_words[(j+13, j)] = word
                         if length == 15:
                             if word in _15l_words:
                                 score += 15
-                                found_words[(j-14, j)] = word
+                                found_words[(j+14, j)] = word
                         word = ""
         word = ""
 
