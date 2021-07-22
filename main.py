@@ -9,7 +9,7 @@ pg.init()
 width = pg.display.Info().current_h - 100      #
 block_size = math.floor(width / 20)            #
 tile_size = math.floor(width / 15)             #
-font = pg.font.SysFont("Aldhabi", block_size)  #
+font = pg.font.SysFont("Simplified Arabic", block_size)  #
 WHITE = (255, 255, 255)                        #
 # ##############################################
 
@@ -56,7 +56,7 @@ te_t = font.render("te", True, WHITE)      #
 se_t = font.render("se", True, WHITE)      #
 jim_t = font.render("jim", True, WHITE)    #
 che_t = font.render("che", True, WHITE)    #
-he_t = font.render("he", True, WHITE)      #
+he_t = font.render("ح", True, WHITE)       #
 khe_t = font.render("khe", True, WHITE)    #
 dal_t = font.render("dal", True, WHITE)    #
 zal_t = font.render("zal", True, WHITE)    #
@@ -154,6 +154,11 @@ ye = pg.transform.scale(ye, (tile_size - 4, tile_size - 4))                     
                                                                                 #
 # ###############################################################################
 
+change_tile_img = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\تعویض.png")
+change_tile_img = pg.transform.scale(change_tile_img, (int(13*width/120), int(width/15)))
+next_img = pg.image.load("F:\\files\\projects\\Games\\wordfeud-fa\\logos\\بعدی.png")
+next_img = pg.transform.scale(next_img, (int(13*width/120), int(width/15)))
+
 # ############################################# ALPHABETS DIFFERENT FORMATS ###############################################
                                                                                                                           #
 alphabets = {a: a_t, alef: alef_t, be: be_t, pe: pe_t, te: te_t, se: se_t, jim: jim_t, che: che_t, he: he_t, khe: khe_t,  #
@@ -174,6 +179,7 @@ pg.display.set_caption("WordFeud")
 
 screen = pg.display.set_mode((width, width))
 screen.fill([17, 20, 26])
+pg.display.set_icon(kaf)
 pg.display.flip()
 
 blocks = {}
@@ -184,13 +190,6 @@ tiles_filling = []
 score = 0
 
 
-def start_tile():
-    global tiles_filling
-    for i in range(8):
-        rnd_num = rnd.randint(0, 32)
-        tiles_filling.append(rnd_num)
-
-
 def draw_background():
     main_border = pg.Rect(int(width / 8), int(width / 8), 15 * block_size, 15 * block_size)
     tile_border = pg.Rect(int(width / 2) - 4 * tile_size, width - tile_size - int(width / 40), 8 * tile_size, tile_size)
@@ -198,30 +197,6 @@ def draw_background():
     pg.draw.rect(screen, [0, 0, 0], main_border, 2, border_radius=2)
     pg.draw.rect(screen, [79, 79, 79], tile_border, 0, border_radius=2)
     pg.draw.rect(screen, [0, 0, 0], tile_border, 2, border_radius=2)
-
-
-def draw_tiles():
-    global tiles, tiles_to_fill
-    i = 1
-    for x in range(int(width / 2) - 4 * tile_size, int(width / 2) + 4 * tile_size, tile_size):
-        pg.draw.rect(screen, [0, 0, 0], pg.Rect(x, width - tile_size - int(width / 40), tile_size, tile_size), 1,
-                     border_radius=3)
-        tiles[i] = (x, width - tile_size - int(width / 40))
-        tiles_to_fill[i] = (x + 2, width - tile_size - int(width / 40) + 2)
-        i += 1
-
-
-def reset_tile():
-    global tiles_filling
-    for i in range(8):
-        tiles_filling[i] = rnd.randint(0, 32)
-
-
-def put_tiles():
-    global tiles_filling
-    for i in range(1, len(tiles_filling) + 1):
-        tile = list(alphabets.keys())[tiles_filling[i - 1]]
-        screen.blit(tile, (tiles_to_fill[i]))
 
 
 def draw_grid():
@@ -235,6 +210,31 @@ def draw_grid():
     for pos in list(alphabets_on_grid.keys()):
         if alphabets_on_grid[pos] is not None:
             screen.blit(alphabets_on_grid[pos], blocks[pos])
+
+
+def draw_tiles():
+    global tiles, tiles_to_fill
+    i = 1
+    for x in range(int(width / 2) - 4 * tile_size, int(width / 2) + 4 * tile_size, tile_size):
+        pg.draw.rect(screen, [0, 0, 0], pg.Rect(x, width - tile_size - int(width / 40), tile_size, tile_size), 1,
+                     border_radius=3)
+        tiles[i] = (x, width - tile_size - int(width / 40))
+        tiles_to_fill[i] = (x + 2, width - tile_size - int(width / 40) + 2)
+        i += 1
+
+
+def start_tile():
+    global tiles_filling
+    for i in range(8):
+        rnd_num = rnd.randint(0, 32)
+        tiles_filling.append(rnd_num)
+
+
+def put_tiles():
+    global tiles_filling
+    for i in range(1, len(tiles_filling) + 1):
+        tile = list(alphabets.keys())[tiles_filling[i - 1]]
+        screen.blit(tile, (tiles_to_fill[i]))
 
 
 def move_tile(x, y):
@@ -264,12 +264,11 @@ def move_tile(x, y):
                 draw_grid()
                 draw_tiles()
                 put_tiles()
-                score_bar()
+                bars()
 
 
 def find_word():
-    global found_words
-    new_words = []
+    global found_words, score
     word = ""
     # vertical search
     for i in range(1, 16):
@@ -278,111 +277,301 @@ def find_word():
                 word += alphabets_text[list(alphabets.values()).index(alphabets_on_grid[j])]
                 if j == i+14*15:
                     if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):
-                        found_words[(j-(len(word)-1)*15, j)] = word
-                        new_words.append(word)
+                        length = len(word)
+                        if length == 2:
+                            if word in _2l_words:
+                                score += 2
+                                found_words[(j-15, j)] = word
+                        if length == 3:
+                            if word in _3l_words:
+                                score += 3
+                                found_words[(j-30, j)] = word
+                        if length == 4:
+                            if word in _4l_words:
+                                score += 4
+                                found_words[(j-45, j)] = word
+                        if length == 5:
+                            if word in _5l_words:
+                                score += 5
+                                found_words[(j-60, j)] = word
+                        if length == 6:
+                            if word in _6l_words:
+                                score += 6
+                                found_words[(j-75, j)] = word
+                        if length == 7:
+                            if word in _7l_words:
+                                score += 7
+                                found_words[(j-90, j)] = word
+                        if length == 8:
+                            if word in _8l_words:
+                                score += 8
+                                found_words[(j-105, j)] = word
+                        if length == 9:
+                            if word in _9l_words:
+                                score += 9
+                                found_words[(j-120, j)] = word
+                        if length == 10:
+                            if word in _10l_words:
+                                score += 10
+                                found_words[(j-135, j)] = word
+                        if length == 11:
+                            if word in _11l_words:
+                                score += 11
+                                found_words[(j-150, j)] = word
+                        if length == 12:
+                            if word in _12l_words:
+                                score += 12
+                                found_words[(j-165, j)] = word
+                        if length == 13:
+                            if word in _13l_words:
+                                score += 13
+                                found_words[(j-180, j)] = word
+                        if length == 14:
+                            if word in _14l_words:
+                                score += 14
+                                found_words[(j-195, j)] = word
+                        if length == 15:
+                            if word in _15l_words:
+                                score += 15
+                                found_words[(j-210, j)] = word
                         word = ""
-                        break
+        
                 elif alphabets_on_grid[j+15] not in list(alphabets.values()):
                     if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):
-                        found_words[(j-(len(word)-1)*15, j)] = word
-                        new_words.append(word)
+                        length = len(word)
+                        if length == 2:
+                            if word in _2l_words:
+                                score += 2
+                                found_words[(j-15, j)] = word
+                        if length == 3:
+                            if word in _3l_words:
+                                score += 3
+                                found_words[(j-30, j)] = word
+                        if length == 4:
+                            if word in _4l_words:
+                                score += 4
+                                found_words[(j-45, j)] = word
+                        if length == 5:
+                            if word in _5l_words:
+                                score += 5
+                                found_words[(j-60, j)] = word
+                        if length == 6:
+                            if word in _6l_words:
+                                score += 6
+                                found_words[(j-75, j)] = word
+                        if length == 7:
+                            if word in _7l_words:
+                                score += 7
+                                found_words[(j-90, j)] = word
+                        if length == 8:
+                            if word in _8l_words:
+                                score += 8
+                                found_words[(j-105, j)] = word
+                        if length == 9:
+                            if word in _9l_words:
+                                score += 9
+                                found_words[(j-120, j)] = word
+                        if length == 10:
+                            if word in _10l_words:
+                                score += 10
+                                found_words[(j-135, j)] = word
+                        if length == 11:
+                            if word in _11l_words:
+                                score += 11
+                                found_words[(j-150, j)] = word
+                        if length == 12:
+                            if word in _12l_words:
+                                score += 12
+                                found_words[(j-165, j)] = word
+                        if length == 13:
+                            if word in _13l_words:
+                                score += 13
+                                found_words[(j-180, j)] = word
+                        if length == 14:
+                            if word in _14l_words:
+                                score += 14
+                                found_words[(j-195, j)] = word
+                        if length == 15:
+                            if word in _15l_words:
+                                score += 15
+                                found_words[(j-210, j)] = word
                         word = ""
-                        break
         word = ""
+
     # horizental search
+    word = ""
     for i in range(1, 212, 15):
         for j in range(i, i+15):
             if alphabets_on_grid[j] in list(alphabets.values()):
                 word += alphabets_text[list(alphabets.values()).index(alphabets_on_grid[j])]
                 if j == i+14:
-                    if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):
-                        found_words[(j-(len(word)-1)*15, j)] = word
-                        new_words.append(word)
+                    if len(word) > 1 and (j-len(word)+1, j) not in list(found_words.keys()):
+                        length = len(word)
+                        if length == 2:
+                            if word in _2l_words:
+                                score += 2
+                                found_words[(j-1, j)] = word
+                        if length == 3:
+                            if word in _3l_words:
+                                score += 3
+                                found_words[(j-2, j)] = word
+                        if length == 4:
+                            if word in _4l_words:
+                                score += 4
+                                found_words[(j-3, j)] = word
+                        if length == 5:
+                            if word in _5l_words:
+                                score += 5
+                                found_words[(j-4, j)] = word
+                        if length == 6:
+                            if word in _6l_words:
+                                score += 6
+                                found_words[(j-5, j)] = word
+                        if length == 7:
+                            if word in _7l_words:
+                                score += 7
+                                found_words[(j-6, j)] = word
+                        if length == 8:
+                            if word in _8l_words:
+                                score += 8
+                                found_words[(j-7, j)] = word
+                        if length == 9:
+                            if word in _9l_words:
+                                score += 9
+                                found_words[(j-8, j)] = word
+                        if length == 10:
+                            if word in _10l_words:
+                                score += 10
+                                found_words[(j-9, j)] = word
+                        if length == 11:
+                            if word in _11l_words:
+                                score += 11
+                                found_words[(j-10, j)] = word
+                        if length == 12:
+                            if word in _12l_words:
+                                score += 12
+                                found_words[(j-11, j)] = word
+                        if length == 13:
+                            if word in _13l_words:
+                                score += 13
+                                found_words[(j-12, j)] = word
+                        if length == 14:
+                            if word in _14l_words:
+                                score += 14
+                                found_words[(j-13, j)] = word
+                        if length == 15:
+                            if word in _15l_words:
+                                score += 15
+                                found_words[(j-14, j)] = word
                         word = ""
-                        break
                 elif alphabets_on_grid[j+1] not in list(alphabets.values()):
-                    if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):
-                        found_words[(j-(len(word)-1)*15, j)] = word
-                        new_words.append(word)
+                    if len(word) > 1 and (j-len(word)+1, j) not in list(found_words.keys()):
+                        length = len(word)
+                        if length == 2:
+                            if word in _2l_words:
+                                score += 2
+                                found_words[(j-1, j)] = word
+                        if length == 3:
+                            if word in _3l_words:
+                                score += 3
+                                found_words[(j-2, j)] = word
+                        if length == 4:
+                            if word in _4l_words:
+                                score += 4
+                                found_words[(j-3, j)] = word
+                        if length == 5:
+                            if word in _5l_words:
+                                score += 5
+                                found_words[(j-4, j)] = word
+                        if length == 6:
+                            if word in _6l_words:
+                                score += 6
+                                found_words[(j-5, j)] = word
+                        if length == 7:
+                            if word in _7l_words:
+                                score += 7
+                                found_words[(j-6, j)] = word
+                        if length == 8:
+                            if word in _8l_words:
+                                score += 8
+                                found_words[(j-7, j)] = word
+                        if length == 9:
+                            if word in _9l_words:
+                                score += 9
+                                found_words[(j-8, j)] = word
+                        if length == 10:
+                            if word in _10l_words:
+                                score += 10
+                                found_words[(j-9, j)] = word
+                        if length == 11:
+                            if word in _11l_words:
+                                score += 11
+                                found_words[(j-10, j)] = word
+                        if length == 12:
+                            if word in _12l_words:
+                                score += 12
+                                found_words[(j-11, j)] = word
+                        if length == 13:
+                            if word in _13l_words:
+                                score += 13
+                                found_words[(j-12, j)] = word
+                        if length == 14:
+                            if word in _14l_words:
+                                score += 14
+                                found_words[(j-13, j)] = word
+                        if length == 15:
+                            if word in _15l_words:
+                                score += 15
+                                found_words[(j-14, j)] = word
                         word = ""
-                        break
         word = ""
-    return new_words
 
 
-def search_word(new_words):
-    global score
-    if len(new_words) > 0:
-        for word in new_words:
-            length = len(word)
-            if length == 2:
-                if word in _2l_words:
-                    score += 2
-            if length == 3:
-                if word in _3l_words:
-                    score += 3
-            if length == 4:
-                if word in _4l_words:
-                    score += 4
-            if length == 5:
-                if word in _5l_words:
-                    score += 5
-            if length == 6:
-                if word in _6l_words:
-                    score += 6
-            if length == 7:
-                if word in _7l_words:
-                    score += 7
-            if length == 8:
-                if word in _8l_words:
-                    score += 8
-            if length == 9:
-                if word in _9l_words:
-                    score += 9
-            if length == 10:
-                if word in _10l_words:
-                    score += 10
-            if length == 11:
-                if word in _11l_words:
-                    score += 11
-            if length == 12:
-                if word in _12l_words:
-                    score += 12
-            if length == 13:
-                if word in _13l_words:
-                    score += 13
-            if length == 14:
-                if word in _14l_words:
-                    score += 14
-            if length == 15:
-                if word in _15l_words:
-                    score += 15
+def next_round():
+    if mouse_pos[0] in range(int(2*width/15)+15*block_size,  int(29*width/120)+15*block_size) and mouse_pos[1] in range(int(width/8), int(23*width/120)):
+        find_word()
 
 
-def score_bar():
+def bars():
     top_bar = pg.Rect(int(width/8), int(width/40), 15*block_size, int(width/15))
-    pg.draw.rect(screen, [0, 0, 0], top_bar, 2, border_radius=3)
+    reset_tile_bar = pg.Rect(int(width/120)-2, int(width/8)-2, int(13*width/120)+4, int(width/15)+4)
+    next_bar = pg.Rect(int(2*width/15)+15*block_size-2, int(width/8)-2, int(13*width/120)+4, int(width/15)+4)
     pg.draw.rect(screen, [54, 54, 54], top_bar, 0, border_radius=3)
+    pg.draw.rect(screen, [0, 0, 0], top_bar, 2, border_radius=3)
     pg.draw.line(screen, [0, 0, 0], (int(width/2), int(width/40)), (int(width/2), int(11*width/120)-1), 2)
-    screen.blit(font.render("Score : %s" % str(score), True, WHITE), (int(width/8)+5, int(7*width/240)))
+    pg.draw.rect(screen, [0, 0, 0], reset_tile_bar, 2, border_radius=3)
+    pg.draw.rect(screen, [0, 0, 0], next_bar, 2, border_radius=3)
+    screen.blit(font.render("Score : %s" % str(score), True, WHITE), (int(width/8)+5, int(width/60)))
+    screen.blit(font.render("Words found : %s" % str(len(found_words.values())), True, WHITE), (int(width/2)+5, int(width/60)))
+    screen.blit(change_tile_img, (int(width/120), int(width/8)))
+    screen.blit(next_img, (int(2*width/15)+15*block_size, int(width/8)))
+
+
+def reset_tile():
+    global tiles_filling
+    if mouse_pos[0] in range(int(width/120),  int(7*width/60)) and mouse_pos[1] in range(int(width/8), int(23*width/120)):
+        for i in range(len(tiles_filling)):
+            tiles_filling[i] = rnd.randint(0, 32)
 
 
 start_tile()
 done = False
 while not done:
-
     mouse_pos = pg.mouse.get_pos()
     draw_background()
     draw_grid()
     draw_tiles()
     put_tiles()
-    score_bar()
-    search_word(find_word())
+    bars()
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
             done = True
         if event.type == pg.MOUSEBUTTONUP:
             if event.button == 1:
+                reset_tile()
                 move_tile(mouse_pos[0], mouse_pos[1])
+                next_round()
+
     pg.display.update()
+print(found_words)
