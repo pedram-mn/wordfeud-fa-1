@@ -407,7 +407,8 @@ def clear_grid():
     if mouse_pos[0] in range(int(2*width/15)+15*block_size,  int(29*width/120)+15*block_size) and mouse_pos[1] in range(int(5*width/24), int(11*width/40)):
         for pos in list(new_on_grid.keys()):
             tiles_filling.append(list(alphabets.values()).index(new_on_grid[pos]))
-            del new_on_grid[pos], alphabets_on_grid[pos]
+            del new_on_grid[pos]
+            alphabets_on_grid[pos] = None
 
 
 start_tile()
