@@ -191,7 +191,7 @@ def put_tiles():
 
 def move_tile(x, y):
     global tiles_filling, alphabets_on_grid
-    for pos in tiles.keys():
+    for pos in range(1, len(tiles_filling)+1):
         if x in range(tiles[pos][0], tiles[pos][0] + tile_size) and y in range(tiles[pos][1],
                                                                                tiles[pos][1] + tile_size):
             selected_tile = list(alphabets.keys())[tiles_filling[pos - 1]]
