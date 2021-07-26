@@ -6,7 +6,10 @@ from pygame.event import clear
 
 pg.init()
 
-width = pg.display.Info().current_h - 100      
+if pg.display.Info().current_h < pg.display.Info().current_w:
+    width = pg.display.Info().current_h - 100      
+else:
+    width = pg.display.Info().current_w - 100
 block_size = math.floor(width / 20)            
 tile_size = math.floor(width / 15)             
 font = pg.font.SysFont("Simplified Arabic", block_size)  
@@ -123,11 +126,6 @@ alphabets_on_grid = {}
 for n in range(1, 226):                                                                                                   
     alphabets_on_grid[n] = None                                                                                           
 
-test = []
-for n in range(1, 226):   
-    test.append(alphabets_on_grid[n])
-del test
-
 scores = {"ا": 1, "آ": 1, "ب": 1, "پ": 2, "ت": 1, "ث": 3, "ج": 2, "چ": 1, "ح": 3, "خ": 2, "د": 2, "ذ": 5, "ر": 1, "ز": 2,
           "ژ": 10, "س": 1, "ش": 2, "ص": 2, "ض": 3, "ط": 4, "ظ": 5, "ع": 3 ,"غ": 3, "ف": 2, "ق": 3, "ک": 2, "گ": 2, "ل": 5,
           "م": 2, "ن": 2, "و": 1, "ه": 2, "ی": 2}
@@ -233,129 +231,136 @@ def find_word():
     return_stat = True
     false_words = []
     new_words = {}
-    # vertical search
-    for i in range(1, 16):  # select x value of grid
-        for j in range(i, 226, 15):  # change y value in a column (up -> down)
-            if alphabets_on_grid[j] in list(alphabets.values()):  # check if any alphabet assigns to that block
-                word += alphabets_on_grid[j]  # add alphabet to word to make it
-                if j == i+14*15:  # check if y value of grid is the last one of the column
-                    if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
-                        new_words[(j-(len(word)-1)*15, j)] = word
-                        # reset word value for next check
-                        word = ""
-        
-                elif alphabets_on_grid[j+15] not in list(alphabets.values()):  # check if next block is empty to recognize the end of the word (checked if last "if" doesn't run)
-                    if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
-                        new_words[(j-(len(word)-1)*15, j)] = word
-                        # reset word value for next check
-                        word = ""
-            else:
-                word = ""
-        word = ""
-    # horizental search
-    for i in range(1, 212, 15):  # select y value of grid
-        for j in range(i+14, i-1, -1):  # change x value in a row (right -> left)
-            if alphabets_on_grid[j] in list(alphabets.values()):  # check if any alphabet assigns to that block
-                word += alphabets_on_grid[j]  # add alphabet to word to make it
-                if j == i:  # check if x value of grid is the last one of the row
-                    if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
-                        new_words[(j+len(word)-1, j)] = word
-                        # reset word value for next check
-                        word = ""
-                
-                elif alphabets_on_grid[j-1] not in list(alphabets.values()):  # check if next block is empty to recognize the end of the word (checked if last "if" doesn't run)
-                    if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
-                        new_words[(j+len(word)-1, j)] = word
-                        # reset word value for next check
-                        word = ""
-            else:
-                word = ""
-        word = ""
-    # check words that found in new round
-    for i, new_word in enumerate(list(new_words.values())):
-        length = len(new_word)
-        # check that the word is in the dictionary or not
-        # if it is, add the word to found_words and change word_stat status to true
-        # if not, add the word to false_words to show it later to player and change word_stat status to false
-        if length == 2:
-            if new_word in _2l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 3:
-            if new_word in _3l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 4:
-            if new_word in _4l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 5:
-            if new_word in _5l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 6:
-            if new_word in _6l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 7:
-            if new_word in _7l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 8:
-            if new_word in _8l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 9:
-            if new_word in _9l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 10:
-            if new_word in _10l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 11:
-            if new_word in _11l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 12:
-            if new_word in _12l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 13:
-            if new_word in _13l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 14:
-            if new_word in _14l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if length == 15:
-            if new_word in _15l_words:
-                word_stat = True
-            else:
-                word_stat = False
-        if word_stat is False:
-            false_words.append(new_word)
-            del new_words[list(new_words.keys())[i]]
-            return_stat = False
+    try:
+        # vertical search
+        for i in range(1, 16):  # select x value of grid
+            for j in range(i, 226, 15):  # change y value in a column (up -> down)
+                if alphabets_on_grid[j] in list(alphabets.values()):  # check if any alphabet assigns to that block
+                    word += alphabets_on_grid[j]  # add alphabet to word to make it
+                    if j == i+14*15:  # check if y value of grid is the last one of the column
+                        if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
+                            new_words[(j-(len(word)-1)*15, j)] = word
+                            # reset word value for next check
+                            word = ""
+            
+                    elif alphabets_on_grid[j+15] not in list(alphabets.values()):  # check if next block is empty to recognize the end of the word (checked if last "if" doesn't run)
+                        if len(word) > 1 and (j-(len(word)-1)*15, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
+                            new_words[(j-(len(word)-1)*15, j)] = word
+                            # reset word value for next check
+                            word = ""
+                else:
+                    word = ""
+            word = ""
+        # horizental search
+        for i in range(1, 212, 15):  # select y value of grid
+            for j in range(i+14, i-1, -1):  # change x value in a row (right -> left)
+                if alphabets_on_grid[j] in list(alphabets.values()):  # check if any alphabet assigns to that block
+                    word += alphabets_on_grid[j]  # add alphabet to word to make it
+                    if j == i:  # check if x value of grid is the last one of the row
+                        if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
+                            new_words[(j+len(word)-1, j)] = word
+                            # reset word value for next check
+                            word = ""
+                    
+                    elif alphabets_on_grid[j-1] not in list(alphabets.values()):  # check if next block is empty to recognize the end of the word (checked if last "if" doesn't run)
+                        if len(word) > 1 and (j+len(word)-1, j) not in list(found_words.keys()):  # check lenght of word if its bigger than 1 and not found before
+                            new_words[(j+len(word)-1, j)] = word
+                            # reset word value for next check
+                            word = ""
+                else:
+                    word = ""
+            word = ""
+        # check words that found in new round
+        if len(new_words) > 0:
+            for new_word in list(new_words.values()):
+                length = len(new_word)
+                # check that the word is in the dictionary or not
+                # if it is, add the word to found_words and change word_stat status to true
+                # if not, add the word to false_words to show it later to player and change word_stat status to false
+                if length == 2:
+                    if new_word in _2l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 3:
+                    if new_word in _3l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 4:
+                    if new_word in _4l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 5:
+                    if new_word in _5l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 6:
+                    if new_word in _6l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 7:
+                    if new_word in _7l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 8:
+                    if new_word in _8l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 9:
+                    if new_word in _9l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 10:
+                    if new_word in _10l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 11:
+                    if new_word in _11l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 12:
+                    if new_word in _12l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 13:
+                    if new_word in _13l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 14:
+                    if new_word in _14l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                if length == 15:
+                    if new_word in _15l_words:
+                        word_stat = True
+                    else:
+                        word_stat = False
+                index = list(new_words.values()).index(new_word)
+                if word_stat is False:
+                    false_words.append(new_word)
+                    del new_words[list(new_words.keys())[index]]
+                    return_stat = False
+                else:
+                    found_words[list(new_words.keys())[index]] = new_word
         else:
-            found_words[list(new_words.keys())[i]] = new_word
+            return (False, ["nothing"])
 
-    return (False, false_words) if not return_stat else (True, list(new_words.values()))
-
+        return (False, false_words) if not return_stat else (True, list(new_words.values()))
+    except KeyError:
+        print("error occured")
+        pass
 
 def next_round():
     global new_on_grid, tiles_filling, score
@@ -368,6 +373,11 @@ def next_round():
                     score += scores[i]
             for i in range(8-len(tiles_filling)):
                 tiles_filling.append(rnd.randint(0, 32))
+        else:
+            if stat[1][0] == "nothing":
+                print("No words found(single alphabets doesn\'t count)")
+            else:
+                print(stat[1], " is not in dictionary")
 
 
 def bars():
