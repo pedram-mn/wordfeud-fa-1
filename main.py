@@ -244,10 +244,8 @@ def move_tile(x, y):
     for pos in blocks.keys():
         if x in range(blocks[pos][0], blocks[pos][0] + block_size) and y in range(blocks[pos][1],
                                                                                   blocks[pos][1] + block_size):
-            try:
-                tmp = new_on_grid[pos]
-                del tmp
-                selected_tile = list(alphabets.keys())[list(alphabets.values()).index(alphabets_on_grid[pos])]
+            if pos in new_on_grid.keys():
+                selected_tile = list(alphabets.keys())[list(alphabets.values()).index(new_on_grid[pos])]
                 click_count = 1
                 alphabets_on_grid[pos] = None
                 while True:
@@ -262,6 +260,9 @@ def move_tile(x, y):
                                     alphabets_on_grid[block] = alphabets[selected_tile]
                                     del new_on_grid[pos]
                                     new_on_grid[block] = alphabets_on_grid[block]
+                                    break
+                                else:
+                                    alphabets_on_grid[pos] = alphabets[selected_tile]
                                     break
                         for tile in tiles.keys():
                             if pg.mouse.get_pos()[0] in range(tiles[tile][0], tiles[tile][0] + tile_size) and \
@@ -281,8 +282,6 @@ def move_tile(x, y):
                     draw_tiles()
                     put_tiles()
                     bars()
-            except KeyError:
-                pass
 
 
 def find_word():
@@ -370,6 +369,7 @@ def next_round():
             range(int(width/8), int(23*width/120)):
         stat = find_word()
         if stat[0]:
+            print(stat[1])
             new_on_grid.clear()
             for word in stat[1]:
                 for i in word:
@@ -410,7 +410,8 @@ def reset_tile():
                                                                                          int(23*width/120)):
         for pos in list(new_on_grid.keys()):
             tiles_filling.append(list(alphabets.values()).index(new_on_grid[pos]))
-            del new_on_grid[pos], alphabets_on_grid[pos]
+            del new_on_grid[pos]
+            alphabets_on_grid[pos] = None
         for i in range(len(tiles_filling)):
             tiles_filling[i] = rnd.randint(0, 32)
 
@@ -423,6 +424,13 @@ def clear_grid():
             tiles_filling.append(list(alphabets.values()).index(new_on_grid[pos]))
             del new_on_grid[pos]
             alphabets_on_grid[pos] = None
+
+
+def animate(x1, y1, x2, y2, layer):
+    dx = abs(x2-x1)
+    dy = abs(y2-y1)
+    while i:
+
 
 
 start_tile()
