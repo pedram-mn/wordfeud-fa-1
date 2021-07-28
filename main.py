@@ -13,7 +13,7 @@ tile_size = math.floor(width / 15)
 font = pg.font.SysFont("Simplified Arabic", block_size)  
 WHITE = (255, 255, 255)                        
                                                                                         
-with open("words\\fa2.txt", "r", encoding='utf-8') as f:   
+with open("words\\fa2.txt", "r", encoding='utf-8') as f:
     _2l_words = np.array(f.read().split("\n"))                                                      
 with open("words\\fa3.txt", "r", encoding='utf-8') as f:   
     _3l_words = np.array(f.read().split("\n"))                                                      
@@ -27,8 +27,8 @@ with open("words\\fa7.txt", "r", encoding='utf-8') as f:
     _7l_words = np.array(f.read().split("\n"))                                                      
 with open("words\\fa8.txt", "r", encoding='utf-8') as f:   
     _8l_words = np.array(f.read().split("\n"))                                                      
-with open("words\\fa9.txt", "r", encoding='utf-8') as f:   
-    _9l_words = np.array(f.read().split("\n"))                                                      
+with open("words\\fa9.txt", "r", encoding='utf-8') as f:
+    _9l_words = np.array(f.read().split("\n"))
 with open("words\\fa10.txt", "r", encoding='utf-8') as f:  
     _10l_words = np.array(f.read().split("\n"))                                                     
 with open("words\\fa11.txt", "r", encoding='utf-8') as f:  
@@ -138,6 +138,10 @@ tiles_to_fill = {}
 found_words = {}
 tiles_filling = []
 new_on_grid = {}
+n_words = {
+    2: _2l_words, 3: _3l_words, 4: _4l_words, 5: _5l_words, 6: _6l_words, 7: _7l_words, 8: _8l_words, 9: _9l_words,
+    10: _11l_words, 11: _11l_words, 12: _12l_words, 13: _13l_words, 14: _14l_words, 15: _15l_words
+          }
 score = 0
 
 pg.display.set_caption("WordFeud")
@@ -340,76 +344,10 @@ def find_word():
                 # check that the word is in the dictionary or not
                 # if it is, add the word to found_words and change word_stat status to true
                 # if not, add the word to false_words to show it later to player and change word_stat status to false
-                if length == 2:
-                    if new_word in _2l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 3:
-                    if new_word in _3l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 4:
-                    if new_word in _4l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 5:
-                    if new_word in _5l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 6:
-                    if new_word in _6l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 7:
-                    if new_word in _7l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 8:
-                    if new_word in _8l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 9:
-                    if new_word in _9l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 10:
-                    if new_word in _10l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 11:
-                    if new_word in _11l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 12:
-                    if new_word in _12l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 13:
-                    if new_word in _13l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 14:
-                    if new_word in _14l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
-                if length == 15:
-                    if new_word in _15l_words:
-                        word_stat = True
-                    else:
-                        word_stat = False
+                if new_word in n_words[length]:
+                    word_stat = True
+                else:
+                    word_stat = False
                 index = list(new_words.values()).index(new_word)
                 if word_stat is False:
                     false_words.append(new_word)
@@ -452,8 +390,7 @@ def bars():
     pg.draw.rect(screen, [0, 0, 0], top_bar, 2, border_radius=3)
     pg.draw.line(screen, [0, 0, 0], (int(width/2), int(width/40)), (int(width/2), int(11*width/120)-1), 2)
     screen.blit(font.render("Score : %i" % score, True, WHITE), (int(width/8)+5, int(width/60)))
-    screen.blit(font.render("Words : %i" % len(found_words.values()), True, WHITE), (int(width/2)+5, int(width/60)))
-
+    screen.blit(font.render("Word : %i" % len(found_words.values()), True, WHITE), (int(width/2)+5, int(width/60)))
     change_bar = pg.Rect(int(width/120)-2, int(width/8)-2, int(13*width/120)+4, int(width/15)+4)
     pg.draw.rect(screen, [0, 0, 0], change_bar, 2, border_radius=3)
     screen.blit(change_tile_img, (int(width/120), int(width/8)))
@@ -461,7 +398,7 @@ def bars():
     next_bar = pg.Rect(int(2*width/15)+15*block_size-2, int(width/8)-2, int(13*width/120)+4, int(width/15)+4)
     pg.draw.rect(screen, [0, 0, 0], next_bar, 2, border_radius=3)
     screen.blit(next_img, (int(2*width/15)+15*block_size, int(width/8)))
-    
+
     clear_bar = pg.Rect(int(2*width/15)+15*block_size-2, int(5*width/24)-2, int(13*width/120)+4, int(width/15)+4)
     pg.draw.rect(screen, [0, 0, 0], clear_bar, 2, border_radius=3)
     screen.blit(clear_img, (int(2*width/15)+15*block_size, int(5*width/24)))
